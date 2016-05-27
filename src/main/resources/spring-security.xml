@@ -5,30 +5,34 @@
            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd">
-    
+
+	<!-- 不需要权限拦截 -->
 	<http pattern="/login.jsp" security="none" />
-	
+
+	<!-- 需要有顺序，放在第一个的最先走，需要调研一个资源有多个权限怎么写 -->
 	<http auto-config="true" use-expressions="true">
 		<intercept-url pattern="/a.jsp" access="hasRole('ROLE_USER')" />
 		<intercept-url pattern="/b.jsp" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/world/test1" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/world/test2" access="hasRole('ROLE_USER')" />
-		
+		<!-- 没有权限的话跳转至xx页面 -->
 		<access-denied-handler error-page="/403" />
-		<form-login 
-		    login-page="/login.jsp" 
-		    default-target-url="/home.jsp"
-			username-parameter="username"
-			password-parameter="password" />
 		
-		<!-- logout -->	
-		<logout/>
 		
+		<!-- 登录成功后，跳转到xx资源 -->
+		<form-login login-page="/login.jsp" default-target-url="/home.jsp"
+			username-parameter="username" password-parameter="password" />
+		
+
+		<!-- 退出登录，需要调研，目前访问/j_spring_security_check即可退出登录，退出登录后怎么去清session需要调研 -->
+		<logout />
+		<!-- 放在最后的拦截，应该为最大的范围 -->
 		<intercept-url pattern="/**" access="hasRole('ROLE_USER')" />
 	</http>
-
+	
+	<!-- 需要调研，是否可以有2种登录，比如老师登录and学生登录,需要去调研，目前的痛点为密码输错的情况下也会导致用户的权限初始化，调研是否有后处理的方法，只在用户输入密码正确后才初始化权限。 -->
 	<authentication-manager>
-		<authentication-provider user-service-ref="myUserDetailsService" >
+		<authentication-provider user-service-ref="myUserDetailsService">
 		</authentication-provider>
 	</authentication-manager>
 

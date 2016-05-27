@@ -6,7 +6,7 @@
 
 
 <br/>
-<a href='<c:url value="/j_spring_security_check"></c:url>'>logout</a>
+<a href='<c:url value="/j_spring_security_logout"></c:url>'>logout</a>
 
 
 </body>

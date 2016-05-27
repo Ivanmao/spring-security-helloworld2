@@ -23,7 +23,7 @@ public class HelloController {
     // 打印授权信息
     System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
     
-    return "hello";
+    return "/WEB-INF/pages/hello.jsp";
   }
   
   
